@@ -11,6 +11,10 @@ div#ball {
   border-radius: 50%;
 }
 
+div#ball.held {
+  background-color: rgb(178, 255, 255);
+}
+
 div#box {
   position: absolute;
 
@@ -52,9 +56,20 @@ div#basket {
   font-weight: 700;
   letter-spacing: 0.4em;
 
+  opacity: 0;
+
   color: rgb(0, 0, 0);
 }
 
-#balleur.hidden {
-  opacity: 0;
+#balleur.flash {
+  animation: flash 125ms infinite;
+  -webkit-animation: flash 125ms infinite;
+
+  opacity: 1;
+}
+
+@keyframes flash {
+  to {
+    opacity: 0;
+  }
 }

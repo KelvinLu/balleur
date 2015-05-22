@@ -50,7 +50,7 @@ Basket.prototype.score = function() {
   airhorn.load();
   airhorn.play();
 
-  balleur.classList.remove('hidden');
+  balleur.classList.add('flash');
 
   setTimeout(this.unlockTime.bind(this), 2000);
 };
@@ -62,7 +62,7 @@ Basket.prototype.unlockPos = function() {
 Basket.prototype.unlockTime = function() {
   this.lock_time = false;
 
-  balleur.classList.add('hidden');
+  balleur.classList.remove('flash');
 };
 
 Basket.prototype.checkBounds = function() {
@@ -122,6 +122,8 @@ Ball.prototype.bindMouse = function() {
     self.dx = 0;
     self.dy = 0;
 
+    self.elem.classList.add('held');
+
     e.preventDefault();
   };
   var release = function(e) {
@@ -129,6 +131,8 @@ Ball.prototype.bindMouse = function() {
       self.held = false;
       self.dx = e.movementX;
       self.dy = e.movementY;
+
+      self.elem.classList.remove('held');
     }
 
     e.preventDefault();
@@ -146,7 +150,6 @@ Ball.prototype.bindMouse = function() {
   };
 
   this.elem.addEventListener('mousedown', hold);
-  this.elem.addEventListener('mouseup', release);
   this.elem.addEventListener('mouseout', release);
   this.elem.addEventListener('mousemove', move);
 };
