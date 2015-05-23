@@ -104,10 +104,10 @@ Ball = function(elem) {
   this.h = rect.height;
   this.w = rect.width;
 
-  this.x = rect.left;
-  this.y = rect.top;
+  this.lastTouchX = this.x = rect.left;
+  this.lastTouchY = this.y = rect.top;
 
-  this.dx = 4;
+  this.dx = 0;
   this.dy = 0;
 
   this.held = false;
@@ -149,9 +149,38 @@ Ball.prototype.bindMouse = function() {
     e.preventDefault();
   };
 
-  this.elem.addEventListener('mousedown', hold);
-  this.elem.addEventListener('mouseout', release);
-  this.elem.addEventListener('mousemove', move);
+  var releaseTouch = function(e) {
+    if (self.held) {
+      self.held = false;
+      self.dx = self.x - self.lastTouchX;
+      self.dy = self.y - self.lastTouchY;
+
+      self.elem.classList.remove('held');
+    }
+
+    e.preventDefault();
+  };
+
+  var moveTouch = function(e) {
+    if (self.held) {
+      self.lastTouchX = self.x;
+      self.lastTouchY = self.y;
+      self.x = e.changedTouches[0].clientX - self.w * 0.5;
+      self.y = e.changedTouches[0].clientY - self.h * 0.5;
+    }
+
+    self.update();
+
+    e.preventDefault();
+  };
+
+  this.elem.addEventListener('mousedown', hold, false);
+  this.elem.addEventListener('mouseout', release, false);
+  this.elem.addEventListener('mousemove', move, false);
+
+  this.elem.addEventListener('touchstart', hold, false);
+  this.elem.addEventListener('touchend', releaseTouch, false);
+  this.elem.addEventListener('touchmove', moveTouch, false);
 };
 
 Ball.prototype.gravity = function() {
